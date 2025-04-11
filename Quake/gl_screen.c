@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // screen.c -- master for refresh, status bar, console, chat, notify, etc
 
 #include "quakedef.h"
+#include "screen.h"
 #include "steam.h"
 #include <time.h>
 
@@ -98,6 +99,7 @@ cvar_t		scr_clock = {"scr_clock", "0", CVAR_ARCHIVE};
 cvar_t		scr_usekfont = {"scr_usekfont", "0", CVAR_NONE}; // 2021 re-release
 
 cvar_t		scr_hudstyle = {"hudstyle", "2", CVAR_ARCHIVE};
+cvar_t      scr_modernhudoffset = {"scr_modernhudoffset", "0", CVAR_ARCHIVE};
 cvar_t		cl_screenshotname = {"cl_screenshotname", "screenshots/%map%_%date%_%time%", CVAR_ARCHIVE};
 cvar_t		scr_demobar_timeout = {"scr_demobar_timeout", "1", CVAR_ARCHIVE};
 
@@ -649,6 +651,7 @@ void SCR_Init (void)
 	Cvar_SetCallback (&scr_viewsize, SCR_Callback_refdef);
 	Cvar_SetCallback (&scr_hudstyle, SCR_HUDStyle_f);
 	Cvar_RegisterVariable (&scr_hudstyle);
+	Cvar_RegisterVariable (&scr_modernhudoffset);
 	Cvar_RegisterVariable (&scr_fov);
 	Cvar_RegisterVariable (&scr_fov_adapt);
 	Cvar_RegisterVariable (&scr_zoomfov);

@@ -22,6 +22,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 // sbar.c -- status bar code
 
 #include "quakedef.h"
+#include "screen.h"
 
 static int		sb_updates;		// if >= vid.numpages, no update needed
 
@@ -1037,11 +1038,19 @@ void Sbar_DrawInventory2 (void)
 	if (scr_viewsize.value < 110)
 	{
 		const int ROW_HEIGHT = 16;
-		x = (int)(glcanvas.right + 1 + 0.5f);
-		y = (int)(LERP (glcanvas.top, glcanvas.bottom - 148, 0.5f) + ROW_HEIGHT * 7 * 0.5f + 0.5f);
+		const int ITEM_WIDTH = 24;
+		if(hudstyle != HUD_SPECTERE) {
+			x = (int)(glcanvas.right + 1 + 0.5f);
+			y = (int)(LERP (glcanvas.top, glcanvas.bottom - 148, 0.5f) + ROW_HEIGHT * 7 * 0.5f + 0.5f);	
+		} else {
+			x = (int)(LERP (glcanvas.left, glcanvas.right - (ITEM_WIDTH * 7 + ITEM_WIDTH), 0.5f));
+			y = (int)(glcanvas.bottom - ROW_HEIGHT * 2.5);
+		}
 
-		if (hipnotic)
-			y += 12; // move down a bit to accomodate the extra weapons
+		if (hipnotic) {
+			if(hudstyle != HUD_SPECTERE)
+				y += 12; // move down a bit to accomodate the extra weapons
+		}
 
 		for (i = 0; i < 7; i++)
 		{
@@ -1066,7 +1075,11 @@ void Sbar_DrawInventory2 (void)
 				}
 				else
 					pic = sb_weapons[flashon][i];
-				Sbar_DrawPic (x - (active ? 24 : 18), y - ROW_HEIGHT * i, pic);
+
+				if(hudstyle != HUD_SPECTERE)
+					Sbar_DrawPic (x - (active ? 24 : 18) - scr_modernhudoffset.value, y - ROW_HEIGHT * i, pic);
+				else
+				 	Sbar_DrawPic (x + (ITEM_WIDTH * i), y, pic);
 
 				if (flashon > 1)
 					sb_updates = 0;		// force update to remove flash
@@ -1131,10 +1144,10 @@ void Sbar_DrawInventory2 (void)
 	{
 		pic = Sbar_InventoryBarPic ();
 
-		if (hudstyle == HUD_MODERN_SIDEAMMO || hudstyle == HUD_QUAKEWORLD) // right side, 2x2
+		if (hudstyle == HUD_MODERN_SIDEAMMO || hudstyle == HUD_QUAKEWORLD || hudstyle == HUD_SPECTERE) // right side, 2x2
 		{
 			const int ITEM_WIDTH = 52;
-			x = (int)(glcanvas.right - SBAR2_MARGIN_X - ITEM_WIDTH * 2 + 0.5f);
+			x = (int)(glcanvas.right - SBAR2_MARGIN_X - ITEM_WIDTH * 2 + 0.5f - scr_modernhudoffset.value);
 			y = (int)(glcanvas.bottom - SBAR2_MARGIN_Y - 60 + 0.5f);
 
 			for (i = 0; i < 2; i++)
@@ -1154,14 +1167,14 @@ void Sbar_DrawInventory2 (void)
 	}
 
 	// items
-	if (scr_viewsize.value < 110 && (hudstyle == HUD_MODERN_SIDEAMMO || hudstyle == HUD_QUAKEWORLD))
+	if (scr_viewsize.value < 110 && (hudstyle == HUD_MODERN_SIDEAMMO || hudstyle == HUD_QUAKEWORLD || hudstyle == HUD_SPECTERE))
 	{
-		x = (int)(glcanvas.right - SBAR2_MARGIN_X - 16 + 0.5f);
+		x = (int)(glcanvas.right - SBAR2_MARGIN_X - 16 + 0.5f - scr_modernhudoffset.value);
 		y = (int)(glcanvas.bottom - SBAR2_MARGIN_Y - 68 - 20 + 0.5f);
 	}
 	else
 	{
-		x = (int)(glcanvas.right - SBAR2_MARGIN_X - 20 + 0.5f);
+		x = (int)(glcanvas.right - SBAR2_MARGIN_X - 20 + 0.5f - scr_modernhudoffset.value);
 		y = (int)(glcanvas.bottom - SBAR2_MARGIN_Y - 68 + 0.5f);
 	}
 
@@ -1184,7 +1197,7 @@ void Sbar_DrawInventory2 (void)
 		{
 			if (scr_viewsize.value >= 110) // just the keys in the mini HUD
 				break;
-			x = (int)(glcanvas.left + SBAR2_MARGIN_X + 4 + 0.5f);
+			x = (int)(glcanvas.left + SBAR2_MARGIN_X + 4 + 0.5f + scr_modernhudoffset.value);
 			y = (int)(glcanvas.bottom - SBAR2_MARGIN_Y - 66 + 0.5f);
 			if (cl.items & IT_INVULNERABILITY || cl.stats[STAT_ARMOR] > 0)
 				y -= 24; // armor row is visible, move starting position above it
@@ -1790,7 +1803,7 @@ void Sbar_Draw (void)
 		{
 			GL_SetCanvas (CANVAS_SBAR2);
 
-			x = (int)(glcanvas.left + SBAR2_MARGIN_X + 0.5f);
+			x = (int)(glcanvas.left + SBAR2_MARGIN_X + 0.5f + scr_modernhudoffset.value);
 			y = (int)(glcanvas.bottom - SBAR2_MARGIN_Y - 48 + 0.5f);
 			Sbar_DrawPic (x, y, Sbar_FacePic ());
 			Sbar_DrawNum (x + 32, y, cl.stats[STAT_HEALTH], 3, cl.stats[STAT_HEALTH] <= 25);
@@ -1801,7 +1814,7 @@ void Sbar_Draw (void)
 				Sbar_DrawPic (x, y - 24, Sbar_ArmorPic ());
 			}
 
-			x = (int)(glcanvas.right - SBAR2_MARGIN_X - 24 + 0.5f);
+			x = (int)(glcanvas.right - SBAR2_MARGIN_X - 24 + 0.5f - scr_modernhudoffset.value);
 			pic = Sbar_AmmoPic ();
 			if (pic)
 			{

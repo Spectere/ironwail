@@ -115,12 +115,14 @@ typedef enum hudstyle_t
 	HUD_MODERN_CENTERAMMO,		// Modern 1
 	HUD_MODERN_SIDEAMMO,		// Modern 2
 	HUD_QUAKEWORLD,
+	HUD_SPECTERE,
 
 	HUD_COUNT,
 } hudstyle_t;
 
 extern	cvar_t		scr_hudstyle;
 extern	hudstyle_t	hudstyle;
+extern  cvar_t      scr_modernhudoffset;
 
 extern int scr_tileclear_updates; //johnfitz
 

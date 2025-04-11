@@ -4340,6 +4340,7 @@ static void M_Options_DrawItem (int y, int item)
 		case HUD_MODERN_CENTERAMMO:		M_Print (x, y, "Modern 1"); break;
 		case HUD_MODERN_SIDEAMMO:		M_Print (x, y, "Modern 2"); break;
 		case HUD_QUAKEWORLD:			M_Print (x, y, "QuakeWorld"); break;
+		case HUD_SPECTERE:              M_Print (x, y, "Spectere"); break;
 		default:
 		case HUD_CLASSIC:				M_Print (x, y, "Classic"); break;
 		}

@@ -1043,7 +1043,10 @@ void Sbar_DrawInventory2 (void)
 			x = (int)(glcanvas.right + 1 + 0.5f);
 			y = (int)(LERP (glcanvas.top, glcanvas.bottom - 148, 0.5f) + ROW_HEIGHT * 7 * 0.5f + 0.5f);	
 		} else {
-			x = (int)(LERP (glcanvas.left, glcanvas.right - (ITEM_WIDTH * 7 + ITEM_WIDTH), 0.5f));
+			if (!hipnotic)
+				x = (int)(LERP (glcanvas.left, glcanvas.right - (ITEM_WIDTH * 7 + ITEM_WIDTH), 0.5f));
+			else
+			 	x = (int)(LERP (glcanvas.left, glcanvas.right - (ITEM_WIDTH * 9 + (ITEM_WIDTH / 2 - 4)), 0.5f));
 			y = (int)(glcanvas.bottom - ROW_HEIGHT * 2.5);
 		}
 
@@ -1088,6 +1091,7 @@ void Sbar_DrawInventory2 (void)
 
 		if (hipnotic) // hipnotic weapons
 		{
+			int picX, picY;
 			int grenadeflashing = 0;
 			for (i = 0; i < 4; i++)
 			{
@@ -1101,6 +1105,14 @@ void Sbar_DrawInventory2 (void)
 					else
 						flashon = (flashon%5) + 2;
 
+					if (hudstyle != HUD_SPECTERE) {
+						picX = x - (active ? 24 : 18);
+						picY = y - ROW_HEIGHT * 4;
+					} else {
+						picX = x + (ITEM_WIDTH * 4);  // grenade launcher slot
+						picY = y;
+					}
+			
 					// check grenade launcher
 					if (i == 2)
 					{
@@ -1109,7 +1121,7 @@ void Sbar_DrawInventory2 (void)
 							if (flashon)
 							{
 								grenadeflashing = 1;
-								Sbar_DrawPic (x - (active ? 24 : 18), y - ROW_HEIGHT * 4, hsb_weapons[flashon][2]);
+								Sbar_DrawPic (picX, picY, hsb_weapons[flashon][2]);
 							}
 						}
 					}
@@ -1119,18 +1131,25 @@ void Sbar_DrawInventory2 (void)
 						{
 							if (flashon && !grenadeflashing)
 							{
-								Sbar_DrawPic (x - (active ? 24 : 18), y - ROW_HEIGHT * 4, hsb_weapons[flashon][3]);
+								Sbar_DrawPic (picX, picY, hsb_weapons[flashon][3]);
 							}
 							else if (!grenadeflashing)
 							{
-								Sbar_DrawPic (x - (active ? 24 : 18), y - ROW_HEIGHT * 4, hsb_weapons[0][3]);
+								Sbar_DrawPic (picX, picY, hsb_weapons[0][3]);
 							}
 						}
 						else
-							Sbar_DrawPic (x - (active ? 24 : 18), y - ROW_HEIGHT * 4, hsb_weapons[flashon][4]);
+							Sbar_DrawPic (picX, picY, hsb_weapons[flashon][4]);
 					}
-					else
-						Sbar_DrawPic (x - (active ? 24 : 18), y - ROW_HEIGHT * (i + 7), hsb_weapons[flashon][i]);
+					else {
+						if (hudstyle != HUD_SPECTERE)
+							picY = y - ROW_HEIGHT * (i + 7);
+						else
+							picX = x + (ITEM_WIDTH * (i + 7)) + (ITEM_WIDTH / 2 - 4);
+						
+
+						Sbar_DrawPic (picX, picY, hsb_weapons[flashon][i]);
+					}
 
 					if (flashon > 1)
 						sb_updates = 0;	// force update to remove flash

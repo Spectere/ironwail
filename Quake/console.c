@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "quakedef.h"
 #include "q_ctype.h"
+#include "screen.h"
 
 #include <sys/types.h>
 #include <time.h>
@@ -2140,7 +2141,7 @@ void Con_DrawNotify (void)
 		}
 		else
 			for (x = 0; x < con_linewidth; x++)
-				Draw_Character ((x+1)<<3, v, text[x]);
+				Draw_Character ((int)scr_msgoffsetx.value + ((x+1)<<3), v, text[x]);
 		GL_SetCanvasColor (1.f, 1.f, 1.f, 1.f);
 
 		v += 8;

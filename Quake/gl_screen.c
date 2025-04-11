@@ -120,6 +120,8 @@ cvar_t		cl_gun_x = {"cl_gun_x","0",CVAR_ARCHIVE};
 cvar_t		cl_gun_y = {"cl_gun_y","0",CVAR_ARCHIVE};
 cvar_t		cl_gun_z = {"cl_gun_z","0",CVAR_ARCHIVE};
 
+cvar_t      scr_msgoffsetx = {"scr_msgoffsetx", "0", CVAR_ARCHIVE};
+
 extern	char	crosshair_char;
 extern	cvar_t	crosshair;
 extern	cvar_t	con_notifyfade;
@@ -667,6 +669,7 @@ void SCR_Init (void)
 	Cvar_RegisterVariable (&cl_gun_x);
 	Cvar_RegisterVariable (&cl_gun_y);
 	Cvar_RegisterVariable (&cl_gun_z);
+	Cvar_RegisterVariable (&scr_msgoffsetx);
 
 	Cmd_AddCommand ("scr_autoscale",SCR_AutoScale_f);
 

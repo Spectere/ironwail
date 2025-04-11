@@ -123,6 +123,7 @@ typedef enum hudstyle_t
 extern	cvar_t		scr_hudstyle;
 extern	hudstyle_t	hudstyle;
 extern  cvar_t      scr_modernhudoffset;
+extern  cvar_t      scr_msgoffsetx;
 
 extern int scr_tileclear_updates; //johnfitz
 
